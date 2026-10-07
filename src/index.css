@@ -1,0 +1,322 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-white font-sans text-navy-900 antialiased dark:bg-navy-950 dark:text-slate-100;
+    /* Decorative blobs and slide-ins must never cause sideways scrolling on phones.
+       clip (not hidden) keeps position: sticky working. */
+    overflow-x: clip;
+  }
+  /* While ThemeToggle switches themes, skip colour transitions so everything changes at once */
+  .theme-switching *:not([data-keep-transition]),
+  .theme-switching *::before,
+  .theme-switching *::after {
+    transition: none !important;
+  }
+  section[id] {
+    scroll-margin-top: 96px;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  }
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400;
+  }
+  .heading-serif {
+    @apply font-serif font-normal tracking-tight text-navy-900 dark:text-white;
+  }
+}
+
+@layer utilities {
+  /* Subtle dot pattern for dark backgrounds */
+  .bg-dot-grid-light {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  /* Soft fade at the top and bottom of the capabilities ticker */
+  .ticker-mask {
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+  }
+  /* Soft fade at the left and right edges of a horizontal strip */
+  .ticker-mask-x {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  }
+  /* Fade an element out at its top and bottom edges */
+  .mask-fade {
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent);
+  }
+}
+
+/* Capabilities ticker: each track holds its cards twice, so moving by 50% loops seamlessly.
+   Kept as plain CSS so the animation never depends on a Tailwind config reload. */
+@keyframes ticker-up {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -50%, 0);
+  }
+}
+@keyframes ticker-down {
+  from {
+    transform: translate3d(0, -50%, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+.ticker-track {
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+.ticker-track[data-direction="up"] {
+  animation-name: ticker-up;
+}
+.ticker-track[data-direction="down"] {
+  animation-name: ticker-down;
+}
+.ticker-track:hover {
+  animation-play-state: paused;
+}
+
+/* Scroll-reveal (components/Reveal.jsx) */
+.reveal {
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal[data-reveal="up"] {
+  transform: translate3d(0, 40px, 0);
+}
+.reveal[data-reveal="left"] {
+  transform: translate3d(-60px, 0, 0);
+}
+.reveal[data-reveal="right"] {
+  transform: translate3d(60px, 0, 0);
+}
+.reveal[data-reveal="zoom"] {
+  transform: scale(0.92);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Slow zoom-out on page banner photos */
+@keyframes banner-zoom {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Endless horizontal strip: content is doubled, so moving by -50% loops seamlessly */
+@keyframes marquee-x {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+.marquee-x {
+  animation: marquee-x 35s linear infinite;
+}
+.marquee-x:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .marquee-x {
+    animation: none;
+  }
+}
+
+/* ===== Careers page animations ===== */
+@keyframes careers-card-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes careers-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -16px, 0);
+  }
+}
+@keyframes careers-zoom {
+  from {
+    transform: scale(1.12);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes careers-gradient {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+@keyframes careers-shine {
+  from {
+    transform: translateX(-120%) skewX(-20deg);
+  }
+  to {
+    transform: translateX(320%) skewX(-20deg);
+  }
+}
+.careers-card-in {
+  animation: careers-card-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.careers-float {
+  animation: careers-float 7s ease-in-out infinite;
+}
+.careers-zoom {
+  animation: careers-zoom 18s ease-out both;
+}
+.careers-gradient {
+  background-size: 200% 200%;
+  animation: careers-gradient 8s ease infinite;
+}
+/* Light sweep across a card or button on hover */
+.careers-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: translateX(-120%) skewX(-20deg);
+  pointer-events: none;
+}
+.careers-shine:hover::after,
+.group:hover .careers-shine::after {
+  animation: careers-shine 0.9s ease;
+}
+/* A softer sweep on dark cards */
+.dark .careers-shine::after {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .careers-card-in,
+  .careers-float,
+  .careers-zoom,
+  .careers-gradient,
+  .careers-shine:hover::after,
+  .group:hover .careers-shine::after {
+    animation: none;
+  }
+}
+
+/* ===== Contact page animations ===== */
+@keyframes contact-ripple {
+  from {
+    transform: scale(0.8);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+@keyframes contact-pin {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40% {
+    transform: translate3d(0, -8px, 0);
+  }
+  60% {
+    transform: translate3d(0, 0, 0) scale(1.06, 0.94);
+  }
+}
+@keyframes contact-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translate3d(0, 16px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes contact-ring {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+@keyframes contact-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-4px);
+  }
+  40%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+.contact-ripple {
+  animation: contact-ripple 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+.contact-pin {
+  animation: contact-pin 2.4s ease-in-out infinite;
+}
+.contact-pop {
+  animation: contact-pop 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.contact-ring {
+  animation: contact-ring 1.4s ease-out 0.2s infinite;
+}
+.contact-shake {
+  animation: contact-shake 0.4s ease-in-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-ripple,
+  .contact-pin,
+  .contact-pop,
+  .contact-ring,
+  .contact-shake {
+    animation: none;
+  }
+}
