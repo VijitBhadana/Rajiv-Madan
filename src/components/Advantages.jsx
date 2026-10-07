@@ -29,6 +29,12 @@ const TURN_STEP = 0.45; // one testimonial
 const HOLD_END = 0.35; // the last testimonial stays put before the pin lets go
 const RESET_AT = 0.5; // fold the wheel up once the section's bottom rises above this much of the viewport
 
+// Below desktop the cards stack above the wheel as normal, and the wheel alone
+// pins once it reaches the top: the page's scroll opens it and turns through
+// every testimonial, then it lets go and the next section scrolls in. Uses the
+// same TURN_STEP / HOLD_END lengths as the desktop timeline.
+const MOBILE_QUERY = "(max-width: 1023px)";
+
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 
 /** Scroll position on the wheel's `turn` scale, with a dwell at every item so a
@@ -90,9 +96,11 @@ export default function Advantages() {
   const sectionRef = useRef(null);
   const itemRefs = useRef([]);
   const contentRef = useRef(null);
+  const stripRef = useRef(null);
   const [state, setState] = useState({ index: 0, open: false });
   const wide = useMediaQuery("(min-width: 640px)");
   const pinned = useMediaQuery(PIN_QUERY);
+  const mobile = useMediaQuery(MOBILE_QUERY);
   const count = testimonials.items.length;
   const cards = advantages.items.length;
 
@@ -122,6 +130,70 @@ export default function Advantages() {
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
   }, [pinned, cards, count]);
+
+  // Pixel lengths of the mobile wheel pin. A phone's innerHeight changes as its
+  // URL bar slides in and out on scroll; only re-measure when the width changes
+  // or the height jumps (rotation), or the pin would lurch mid-scroll.
+  const [strip, setStrip] = useState(null);
+  useEffect(() => {
+    if (!mobile) {
+      setStrip(null);
+      return;
+    }
+    let last = null;
+    const measure = () => {
+      const vh = window.innerHeight;
+      const w = window.innerWidth;
+      if (last && last.w === w && Math.abs(last.vh - vh) < 150) return;
+      last = { w, vh };
+      const header = document.querySelector("header")?.offsetHeight ?? 0;
+      const stage = vh - header;
+      const wheelH = Math.max(384, Math.min(600, stage - 64)); // leaves room for the caption row
+      // The pinned wheel sits centred in the stage, and the ring - about as
+      // tall as the wheel is wide - sits centred in the wheel, so above the ring
+      // is a tall empty band. Pull the strip up by that much so the ring follows
+      // the last card at the grid's normal gap; pinned, it still lands centred.
+      const ringW = Math.min(wheelH, stripRef.current?.offsetWidth ?? w);
+      setStrip({
+        vh,
+        header,
+        stage,
+        height: stage + (count * TURN_STEP + HOLD_END) * vh,
+        turnPx: TURN_STEP * vh,
+        wheel: wheelH,
+        lift: Math.max(0, (stage - 44 - ringW) / 2),
+      });
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [mobile, count]);
+
+  // Turn the mobile wheel off the scroll position while it is pinned.
+  useEffect(() => {
+    if (!strip) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const el = stripRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      if (rect.bottom < strip.vh * RESET_AT) wheel.current?.set(0);
+      else {
+        const scrolled = strip.header - rect.top; // 0 when the pin engages
+        wheel.current?.set(dwell(Math.min(count, Math.max(0, scrolled / strip.turnPx))));
+      }
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, [strip, count]);
 
   // Scale the advantages column down when it is taller than the stage.
   // offsetHeight ignores the transform, so this reads its natural height.
@@ -186,6 +258,11 @@ export default function Advantages() {
   // testimonial i). Pinned, they scroll the page to that stop on the timeline
   // rather than turning the wheel behind the scroll's back.
   const goTo = (turn) => {
+    if (strip) {
+      const top = window.scrollY + stripRef.current.getBoundingClientRect().top;
+      window.scrollTo({ top: top - strip.header + turn * strip.turnPx, behavior: "smooth" });
+      return;
+    }
     if (!layout) {
       wheel.current?.set(turn);
       return;
@@ -239,56 +316,67 @@ export default function Advantages() {
           </div>
 
           {/* Testimonials, on a wheel: a ring at rest, opened into a drum by the
-              page's scroll when pinned - otherwise by scrolling over it,
-              dragging (swiping sideways on touch) or the arrows. */}
-          <div id="testimonials" className="w-full max-w-xl scroll-mt-24 justify-self-center lg:max-w-none lg:justify-self-stretch">
-            <WorksWheel
-              ref={wheel}
-              items={testimonials.items.map((item) => ({ ...item, title: item.author }))}
-              label={testimonials.wheelLabel}
-              geometry={layout ? WHEEL_PINNED : wide ? WHEEL : WHEEL_NARROW}
-              showTitle={false}
-              showIndex={false}
-              interactive={!layout}
-              onChange={setState}
-              renderItem={(item, { width }) => <TestimonialCard item={item} width={width} />}
-              className="h-[500px] font-serif min-[400px]:h-[540px] sm:h-[600px]"
-              style={layout ? { height: layout.wheel } : undefined}
-            />
+              page's scroll when pinned (the whole section on desktop, the wheel
+              alone on mobile) - otherwise by scrolling over it, dragging or the
+              arrows. */}
+          <div
+            id="testimonials"
+            ref={stripRef}
+            className="w-full max-w-xl scroll-mt-24 justify-self-center lg:max-w-none lg:justify-self-stretch"
+            style={strip ? { height: strip.height, marginTop: -strip.lift } : undefined}
+          >
+            <div
+              className={cn(strip && "sticky flex flex-col justify-center")}
+              style={strip ? { top: strip.header, height: strip.stage } : undefined}
+            >
+              <WorksWheel
+                ref={wheel}
+                items={testimonials.items.map((item) => ({ ...item, title: item.author }))}
+                label={testimonials.wheelLabel}
+                geometry={layout ? WHEEL_PINNED : wide ? WHEEL : WHEEL_NARROW}
+                showTitle={false}
+                showIndex={false}
+                interactive={!layout && !strip}
+                onChange={setState}
+                renderItem={(item, { width }) => <TestimonialCard item={item} width={width} />}
+                className="h-[500px] font-serif min-[400px]:h-[540px] sm:h-[600px]"
+                style={layout ? { height: layout.wheel } : strip ? { height: strip.wheel } : undefined}
+              />
 
-            <div className="mt-2 flex items-center justify-between px-1">
-              <p className="text-xs text-slate-500 dark:text-slate-400" aria-live="polite">
-                {state.open ? (
-                  <>
-                    <span className="font-semibold text-navy-900 dark:text-white">{String(state.index + 1).padStart(2, "0")}</span>
-                    {" / "}
-                    {String(count).padStart(2, "0")}
-                  </>
-                ) : layout ? (
-                  "Keep scrolling to read"
-                ) : (
-                  "Scroll, drag or tap the arrows to read"
-                )}
-              </p>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => goTo(state.index)}
-                  disabled={!state.open}
-                  aria-label="Previous testimonial"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-navy-900 shadow-card transition hover:border-brand-400 hover:text-brand-600 dark:border-white/10 dark:bg-navy-800 dark:text-white dark:hover:border-brand-400 dark:hover:text-brand-400 disabled:pointer-events-none disabled:opacity-40"
-                >
-                  <ChevronUp className="h-4 w-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => goTo(state.open ? state.index + 2 : 1)}
-                  disabled={state.open && state.index === count - 1}
-                  aria-label="Next testimonial"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-navy-900 shadow-card transition hover:border-brand-400 hover:text-brand-600 dark:border-white/10 dark:bg-navy-800 dark:text-white dark:hover:border-brand-400 dark:hover:text-brand-400 disabled:pointer-events-none disabled:opacity-40"
-                >
-                  <ChevronDown className="h-4 w-4" />
-                </button>
+              <div className="mt-2 flex items-center justify-between px-1">
+                <p className="text-xs text-slate-500 dark:text-slate-400" aria-live="polite">
+                  {state.open ? (
+                    <>
+                      <span className="font-semibold text-navy-900 dark:text-white">{String(state.index + 1).padStart(2, "0")}</span>
+                      {" / "}
+                      {String(count).padStart(2, "0")}
+                    </>
+                  ) : layout || strip ? (
+                    "Keep scrolling to read"
+                  ) : (
+                    "Scroll, drag or tap the arrows to read"
+                  )}
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => goTo(state.index)}
+                    disabled={!state.open}
+                    aria-label="Previous testimonial"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-navy-900 shadow-card transition hover:border-brand-400 hover:text-brand-600 dark:border-white/10 dark:bg-navy-800 dark:text-white dark:hover:border-brand-400 dark:hover:text-brand-400 disabled:pointer-events-none disabled:opacity-40"
+                  >
+                    <ChevronUp className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => goTo(state.open ? state.index + 2 : 1)}
+                    disabled={state.open && state.index === count - 1}
+                    aria-label="Next testimonial"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-navy-900 shadow-card transition hover:border-brand-400 hover:text-brand-600 dark:border-white/10 dark:bg-navy-800 dark:text-white dark:hover:border-brand-400 dark:hover:text-brand-400 disabled:pointer-events-none disabled:opacity-40"
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
