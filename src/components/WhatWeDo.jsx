@@ -1,10 +1,13 @@
+import { useRef } from "react";
 import { Phone } from "lucide-react";
 import logo from "../assets/logo.webp";
 import SocialLinks from "./SocialLinks";
+import CardCourier from "./CardCourier";
 import { whatWeDo, contact } from "../data/siteData";
 
 export default function WhatWeDo() {
   const { profile } = whatWeDo;
+  const cardRef = useRef(null);
 
   return (
     <section id="what-we-do" className="bg-surface py-16 dark:bg-navy-900 lg:py-20">
@@ -28,7 +31,7 @@ export default function WhatWeDo() {
               </div>
             </div>
 
-            <div className="min-w-0 rounded-2xl border border-white/10 bg-navy-800 p-5 sm:p-7">
+            <div ref={cardRef} className="relative z-20 min-w-0 rounded-2xl border border-white/10 bg-navy-800 p-5 sm:p-7">
               <div className="flex items-center gap-3">
                 <img src={logo} alt="" width="48" height="48" className="h-12 w-12 rounded-full ring-2 ring-white/10" />
                 <div>
@@ -54,6 +57,9 @@ export default function WhatWeDo() {
               </div>
             </div>
           </div>
+
+          {/* Walks the card in and sets it down in its place */}
+          <CardCourier cardRef={cardRef} />
         </div>
       </div>
     </section>

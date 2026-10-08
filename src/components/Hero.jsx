@@ -1,11 +1,10 @@
 import { Phone, ArrowDown } from "lucide-react";
 import Icon from "./Icon";
 import Typewriter from "./Typewriter";
+import HeroCardStack from "./HeroCardStack";
 import { hero, contact } from "../data/siteData";
 
 export default function Hero() {
-  const { card } = hero;
-
   return (
     <section id="home" className="overflow-x-clip bg-surface pb-16 pt-8 dark:bg-navy-900 sm:pb-20 sm:pt-10 lg:pb-24">
       <div className="container-x">
@@ -53,72 +52,10 @@ export default function Hero() {
                 <ArrowDown className="h-4 w-4 text-brand-600 dark:text-brand-400" />
               </a>
             </div>
-
-            <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {hero.credentials.map((c, i) => (
-                <div
-                  key={c.title}
-                  className="animate-slide-in-left rounded-lg border border-slate-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-navy-800 motion-reduce:animate-none"
-                  style={{ animationDelay: `${300 + i * 120}ms` }}
-                >
-                  <p className="text-sm font-semibold text-navy-900 dark:text-white">{c.title}</p>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">{c.subtitle}</p>
-                </div>
-              ))}
-            </div>
           </div>
 
-          {/* Right profile card */}
-          <div className="animate-slide-in-right rounded-2xl border border-slate-100 bg-white p-5 font-display shadow-panel dark:border-white/10 dark:bg-navy-800 dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.6)] motion-reduce:animate-none sm:p-7">
-            <div className="flex flex-wrap-reverse items-start justify-between gap-3">
-              <div className="min-w-[12rem] flex-1">
-                <h2 className="text-lg font-extrabold leading-tight tracking-tight text-navy-900 dark:text-white">{card.title}</h2>
-                <p className="mt-1 text-xs font-semibold text-slate-500 dark:text-slate-400">{card.subtitle}</p>
-              </div>
-              <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 text-[11px] font-bold text-brand-700 ring-1 ring-brand-200 dark:bg-brand-500/10 dark:text-brand-400 dark:ring-brand-500/30">
-                <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
-                {card.status}
-              </span>
-            </div>
-
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              {card.stats.map((s, i) => (
-                <div
-                  key={s.label}
-                  className="animate-slide-in-right rounded-xl border border-slate-100 bg-slate-50/60 p-3.5 dark:border-white/5 dark:bg-white/5 motion-reduce:animate-none sm:p-4"
-                  style={{ animationDelay: `${250 + i * 120}ms` }}
-                >
-                  <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">{s.label}</p>
-                  <p
-                    className={`mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl ${
-                      s.accent ? "text-brand-600 dark:text-brand-400" : "text-navy-900 dark:text-white"
-                    }`}
-                  >
-                    {s.value}
-                  </p>
-                  <p className="mt-1 text-xs font-semibold leading-snug text-slate-500 dark:text-slate-400">{s.note}</p>
-                </div>
-              ))}
-            </div>
-
-            <div
-              className="mt-4 flex animate-slide-in-right flex-wrap items-center justify-between gap-3 rounded-xl bg-navy-900 px-4 py-4 dark:bg-navy-950 dark:ring-1 dark:ring-white/10 motion-reduce:animate-none sm:px-5"
-              style={{ animationDelay: `${250 + card.stats.length * 120}ms` }}
-            >
-              <div>
-                <p className="text-xs font-semibold text-slate-300">{card.footerLabel}</p>
-                <a href={contact.phoneHref} className="text-base font-extrabold tracking-tight text-brand-400">
-                  {contact.phone}
-                </a>
-              </div>
-              <a
-                href={contact.phoneHref}
-                className="rounded-md bg-brand-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-brand-500"
-              >
-                {card.footerButton}
-              </a>
-            </div>
-          </div>
+          {/* Right: rotating card stack */}
+          <HeroCardStack cards={hero.cards} />
         </div>
       </div>
     </section>

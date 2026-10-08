@@ -50,25 +50,83 @@ export const hero = {
   description:
     "Experienced accounting, meticulous payroll management, and proactive corporate tax strategies tailored for owner-operators and businesses across Mississauga and the Greater Toronto Area.",
   secondaryCta: "Explore Consulting Services",
-  credentials: [
-    { title: "CPA", subtitle: "Chartered Ontario" },
-    { title: "CA", subtitle: "Chartered Institute" },
-    { title: "CGA", subtitle: "Certified General" },
-    { title: "QuickBooks", subtitle: "Certified ProAdvisor" },
+  // Rotating card stack on the right of the hero (image = Unsplash photo id)
+  cards: [
+    {
+      tag: "Bookkeeping",
+      title: "Accounting & Books",
+      text: "Clean, reconciled books in QuickBooks Online or Xero.",
+      stat: "15+ Yrs Experience",
+      image: "1554224155-8d04cb21cd6c",
+      alt: "Calculator and financial paperwork",
+    },
+    {
+      tag: "Tax",
+      title: "Corporate & Personal Tax",
+      text: "T1 and T2 returns filed accurately, every deadline met.",
+      stat: "100% On-Time Filing",
+      image: "1450101499163-c8848c66ca85",
+      alt: "Signing tax documents",
+    },
+    {
+      tag: "CRA",
+      title: "CRA Compliance",
+      text: "GST/HST, payroll remittances and CRA correspondence handled.",
+      stat: "Zero Late Penalties",
+      image: "1554224154-26032ffc0d07",
+      alt: "Reviewing compliance paperwork",
+    },
+    {
+      tag: "Advisory",
+      title: "Business Growth",
+      text: "Budgets, cash-flow forecasts and KPI reporting.",
+      stat: "CFO-Level Insight",
+      image: "1460925895917-afdab827c52f",
+      alt: "Business analytics dashboard",
+    },
+    {
+      tag: "Clients",
+      title: "Client Care",
+      text: "Direct access to Rajiv across Mississauga and the GTA.",
+      stat: "5-Star Reputation",
+      image: "1521791136064-7986c2920216",
+      alt: "Handshake with a client",
+    },
   ],
-  card: {
-    title: "Rajiv Madan Professional Corp",
-    subtitle: "Licensed Public Accounting Practice",
-    status: "Active Fiscal Advisor",
-    stats: [
-      { label: "Experience", value: "15+ Yrs", note: "Serving Greater Toronto Area", accent: false },
-      { label: "Compliance", value: "100%", note: "On-Time Filing Guarantee", accent: true },
-      { label: "Penalties", value: "Zero", note: "Late CRA Penalty Track Record", accent: false },
-      { label: "Client Care", value: "5-Star", note: "Verifiable Regional Reputation", accent: true },
-    ],
-    footerLabel: "Speak Directly With Rajiv",
-    footerButton: "Book Call",
-  },
+};
+
+// Credentials product line under the hero (image = Unsplash photo id)
+export const credentials = {
+  title: "Our Credentials",
+  periodLabel: "CPA · CA · CGA · ProAdvisor",
+  image: "1554224155-6726b3ff858f",
+  imageAlt: "Accountant reviewing financial statements",
+  items: [
+    {
+      id: "cpa",
+      title: "CPA",
+      subtitle: "Chartered Ontario",
+      content: "Chartered Professional Accountant, held to CPA Ontario's standards of practice",
+    },
+    {
+      id: "ca",
+      title: "CA",
+      subtitle: "Chartered Institute",
+      content: "Chartered Accountant designation from the Institute of Chartered Accountants of India",
+    },
+    {
+      id: "cga",
+      title: "CGA",
+      subtitle: "Certified General",
+      content: "Certified General Accountant (Canada) across reporting, tax and management accounting",
+    },
+    {
+      id: "quickbooks",
+      title: "QuickBooks",
+      subtitle: "Certified ProAdvisor",
+      content: "Intuit-certified to set up, clean up and run your books in QuickBooks Online",
+    },
+  ],
 };
 
 // About section - text taken from the original "About Rajiv" page
@@ -126,6 +184,59 @@ export const coreServices = {
       title: "Controllership Services",
       text: "Experienced, high-level controllership duties managed by a professional Mississauga accountant for organizations of any business size.",
       link: "Executive Oversight",
+    },
+  ],
+  // Giant faint words behind the homepage carousel
+  backdropWords: ["Tax", "Audit", "Ledger", "Payroll", "Assurance", "CPA"],
+  // Homepage polaroid carousel. Images are Unsplash photo ids; captions stay short (two lines max)
+  slides: [
+    {
+      image: "1554224155-8d04cb21cd6c",
+      title: "Book Keeping",
+      caption: "Accurate, up-to-date ledgers and reconciliations,\nso your books are always ready.",
+      alt: "Calculator and receipts on a desk",
+    },
+    {
+      image: "1579621970563-ebec7560ff3e",
+      title: "Payroll Management",
+      caption: "On-time payroll, remittances and T4s,\nhandled end to end with zero penalties.",
+      alt: "Plant growing from a pile of coins",
+    },
+    {
+      image: "1554224155-6726b3ff858f",
+      title: "Personal & Corp. Tax",
+      caption: "T1 and T2 returns filed accurately across\nMississauga and Toronto.",
+      alt: "Tax forms, calculator and pen",
+    },
+    {
+      image: "1450101499163-c8848c66ca85",
+      title: "Business Registration",
+      caption: "Incorporation, CRA business number and HST,\nset up right from Day 1.",
+      alt: "Signing business registration documents",
+    },
+    {
+      image: "1486406146926-c627a92ad1ab",
+      title: "Controllership",
+      caption: "Senior-level financial oversight and controls\nfor businesses of any size.",
+      alt: "Corporate office towers",
+    },
+    {
+      image: "1460925895917-afdab827c52f",
+      title: "Financial Statements",
+      caption: "Clear, compliant statements prepared for\nlenders, investors and the CRA.",
+      alt: "Laptop showing financial dashboards",
+    },
+    {
+      image: "1551836022-d5d88e9218df",
+      title: "Tax Advisory",
+      caption: "Year-round planning that keeps more of\nwhat you earn, legally and simply.",
+      alt: "Advisor meeting with a client",
+    },
+    {
+      image: "1434626881859-194d67b2b86f",
+      title: "General Accounting",
+      caption: "Day-to-day accounting support from a\ndedicated GTA CPA you can reach.",
+      alt: "Charts and reports on a desk",
     },
   ],
 };

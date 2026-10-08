@@ -162,7 +162,7 @@ export default function ServicesPage() {
           </Reveal>
 
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {capabilities.items.map((item, index) => (
+            {capabilities.items.slice(0, 8).map((item, index) => (
               <Reveal key={item.title} from="up" delay={(index % 4) * 90} className="h-full [&>article]:h-full">
                 <CapabilityCard item={item} index={index} />
               </Reveal>
