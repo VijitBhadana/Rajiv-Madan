@@ -613,3 +613,219 @@
     transition: none;
   }
 }
+
+/* ===== Advantages: rustic wooden boards hanging from hinges and ropes ===== */
+.plank-list {
+  --plank-gap: 2.75rem;
+  --stub: 18px; /* how far each board's wooden stubs stand above its top edge */
+}
+@media (min-width: 1024px) {
+  .plank-list {
+    --plank-gap: clamp(2rem, 4.6vh, 3rem);
+  }
+}
+.plank {
+  position: relative;
+  transform-origin: 50% 0;
+}
+.plank-wood {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 12px 12px rgba(0, 0, 0, 0.5));
+}
+.plank-title {
+  color: #fbe8c6;
+  text-shadow:
+    0 1px 1px rgba(20, 8, 2, 0.9),
+    0 0 10px rgba(20, 8, 2, 0.45);
+}
+.plank-text {
+  color: #f1dcb6;
+  text-shadow:
+    0 1px 1px rgba(20, 8, 2, 0.85),
+    0 0 8px rgba(20, 8, 2, 0.4);
+}
+.plank-badge {
+  color: #fbe8c6;
+  background: radial-gradient(circle at 50% 40%, rgba(30, 12, 3, 0.55), rgba(30, 12, 3, 0.8));
+  box-shadow:
+    inset 0 0 0 1.5px rgba(251, 232, 198, 0.55),
+    inset 0 2px 3px rgba(0, 0, 0, 0.6),
+    0 1px 0 rgba(240, 180, 122, 0.25);
+}
+
+/* the two short posts behind the board's top edge, as on a hanging sign */
+.plank-stub {
+  position: absolute;
+  top: calc(-1 * var(--stub));
+  width: 16px;
+  height: calc(var(--stub) + 14px);
+  transform: translateX(-50%);
+  border-radius: 2px 2px 0 0;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 3px, rgba(90, 52, 20, 0.22) 3px 4px, transparent 4px 7px),
+    linear-gradient(90deg, #8f6332, #c99a5e 35%, #b58349 65%, #7d5428);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 228, 180, 0.5),
+    0 2px 3px rgba(0, 0, 0, 0.45);
+}
+/* rope from the board above, tied off round this board's post */
+.plank-rope {
+  position: absolute;
+  bottom: calc(100% + var(--stub) - 6px);
+  width: 5px;
+  height: calc(var(--plank-gap) - var(--stub) + 6px + 28px);
+  border-radius: 3px;
+  transform: translateX(-50%);
+  background: repeating-linear-gradient(-55deg, #e2c590 0 2px, #9f7744 2px 4px);
+  box-shadow: 1px 0 1px rgba(0, 0, 0, 0.4);
+}
+.plank-tie {
+  position: absolute;
+  top: calc(-1 * var(--stub) + 3px);
+  width: 21px;
+  height: 8px;
+  transform: translateX(-50%);
+  border-radius: 4px;
+  background: repeating-linear-gradient(-60deg, #e2c590 0 2px, #9f7744 2px 4px);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* the fixed beam the top board hangs from */
+.plank-beam {
+  position: absolute;
+  top: 0;
+  left: 6%;
+  right: 6%;
+  height: 16px;
+}
+.plank-beam > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.55));
+}
+.plank-screw {
+  position: absolute;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  transform: translate(-50%, -50%);
+  background:
+    linear-gradient(45deg, transparent 42%, rgba(40, 44, 48, 0.85) 42% 58%, transparent 58%),
+    radial-gradient(circle at 35% 30%, #f3f5f7, #9aa2ab 55%, #5c636b);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+}
+
+/* brushed-steel butt hinges joining the beam to the top board's posts */
+.plank-hinge {
+  position: absolute;
+  top: 7px;
+  width: 22px;
+  height: calc(var(--stub) + 18px); /* down to just over the post tops */
+  transform: translateX(-50%);
+}
+.plank-hinge-leaf {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 13px;
+  border-radius: 2px;
+  border: 1px solid #4f565d;
+  background: linear-gradient(90deg, #7f878f, #d9dde2 40%, #eef1f4 50%, #b3bac1 62%, #7a828a);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+.plank-hinge-leaf::before,
+.plank-hinge-leaf::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  transform: translateY(-50%);
+  background: radial-gradient(circle at 35% 30%, #c9ced4, #4b5157);
+}
+.plank-hinge-leaf::before {
+  left: 3px;
+}
+.plank-hinge-leaf::after {
+  right: 3px;
+}
+.plank-hinge-leaf:first-child {
+  top: 0;
+}
+.plank-hinge-leaf:last-child {
+  bottom: 0;
+}
+/* the knuckle: three barrels on a pin, the axis the board swings about */
+.plank-hinge-knuckle {
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  top: 50%;
+  height: 8px;
+  transform: translateY(-50%);
+  border-radius: 4px;
+  background:
+    linear-gradient(90deg, transparent 32%, rgba(30, 33, 37, 0.7) 32% 35%, transparent 35% 65%, rgba(30, 33, 37, 0.7) 65% 68%, transparent 68%),
+    linear-gradient(180deg, #f4f6f8, #a9b0b7 45%, #6b737b 80%, #4c5359);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+/* the strap down from the knuckle to the post */
+.plank-hinge::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 13px;
+  bottom: 13px;
+  width: 6px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #6f777f, #d3d8dd 50%, #6f777f);
+}
+
+/* once every board has arrived, the chain floats: the top board swings on
+   its hinges, the ones below sway on their ropes, a beat behind each other */
+.plank-list.is-floating .plank {
+  will-change: transform;
+  animation: plank-sway 4.6s ease-in-out calc(var(--i, 0) * 0.3s) infinite;
+}
+.plank-list.is-floating .plank-hinged {
+  animation-name: plank-swing;
+}
+@keyframes plank-swing {
+  0%,
+  100% {
+    transform: perspective(900px) rotateX(0deg);
+  }
+  25% {
+    transform: perspective(900px) rotateX(6deg);
+  }
+  75% {
+    transform: perspective(900px) rotateX(-6deg);
+  }
+}
+@keyframes plank-sway {
+  0%,
+  50%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-2px) rotate(0.8deg);
+  }
+  75% {
+    transform: translateY(-2px) rotate(-0.8deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .plank-list.is-floating .plank {
+    animation: none;
+  }
+}

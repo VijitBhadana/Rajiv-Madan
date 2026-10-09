@@ -94,6 +94,8 @@ function place(ringDeg, drumDeg, ringR, drumR, bow, m) {
  *   Fires when the front item changes or the ring opens / closes.
  * @param {boolean} [props.interactive] Turn on wheel, drag and arrow keys. Off,
  *   the wheel only moves through its handle. @default true
+ * @param {boolean} [props.ring] Start as the ring around the label. Off, the
+ *   wheel opens straight onto the drum and never folds back up. @default true
  */
 export const WorksWheel = React.forwardRef(function WorksWheel(
   {
@@ -106,6 +108,7 @@ export const WorksWheel = React.forwardRef(function WorksWheel(
     showIndex = true,
     onChange,
     interactive = true,
+    ring = true,
     className,
     ...props
   },
@@ -119,10 +122,12 @@ export const WorksWheel = React.forwardRef(function WorksWheel(
 
   // The wheel's position, and where it is heading. Only `active` and `open` are
   // state - everything else is written to the DOM, so turning is not a render.
-  const turn = React.useRef(0);
-  const target = React.useRef(0);
+  // Without the ring, the lowest the wheel goes is item 0 at the front.
+  const floor = ring ? 0 : 1;
+  const turn = React.useRef(floor);
+  const target = React.useRef(floor);
   const [active, setActive] = React.useState(0);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(!ring);
   const [stage, setStage] = React.useState({ w: 0, h: 0 });
 
   const count = items.length;
@@ -253,9 +258,9 @@ export const WorksWheel = React.forwardRef(function WorksWheel(
 
   const to = React.useCallback(
     (next) => {
-      target.current = clamp(next, 0, last + 1);
+      target.current = clamp(next, floor, last + 1);
     },
-    [last],
+    [last, floor],
   );
 
   React.useImperativeHandle(
@@ -285,7 +290,7 @@ export const WorksWheel = React.forwardRef(function WorksWheel(
     if (!el || !interactive) return;
     const onWheel = (event) => {
       const next = target.current + event.deltaY / WHEEL_UNITS;
-      if (next > 0 && next < last + 1) event.preventDefault();
+      if (next > floor && next < last + 1) event.preventDefault();
       to(next);
       // A wheel gesture arrives as a burst of events with no end of its own, so
       // the rest position is whatever notch it happened to stop on. Settle onto
@@ -304,7 +309,7 @@ export const WorksWheel = React.forwardRef(function WorksWheel(
       el.removeEventListener("wheel", onWheel);
       window.clearTimeout(settling.current);
     };
-  }, [to, last, interactive]);
+  }, [to, last, floor, interactive]);
 
   // Handlers for driving the wheel by hand; left off when the parent drives it.
   const handlers = interactive
@@ -431,13 +436,15 @@ export const WorksWheel = React.forwardRef(function WorksWheel(
       {/* Ring title and front-card title trade places across the transition.
           Type is sized off the measured stage, not vh, so the wheel keeps its
           proportions inside a card as well as at full bleed. */}
-      <div
-        ref={labelRef}
-        className="pointer-events-none absolute inset-0 grid place-items-center tracking-tight"
-        style={{ fontSize: metrics.label }}
-      >
-        {label}
-      </div>
+      {ring ? (
+        <div
+          ref={labelRef}
+          className="pointer-events-none absolute inset-0 grid place-items-center tracking-tight"
+          style={{ fontSize: metrics.label }}
+        >
+          {label}
+        </div>
+      ) : null}
       {showTitle ? (
         <div
           ref={titleRef}

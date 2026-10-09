@@ -385,6 +385,8 @@ export const advantages = {
 // Shown on the testimonial wheel. Only the first entry is a real client quote -
 // the rest are SAMPLE TEXT: replace them with genuine client testimonials (or
 // delete them) before the site goes live.
+// `image` is an Unsplash photo id for the card's cover; `tags` are the chips
+// under the quote.
 export const testimonials = {
   label: "Client Testimonial",
   wheelLabel: "Client Stories",
@@ -395,6 +397,8 @@ export const testimonials = {
         "“We have been getting assistance from Rajiv Madan, CGA in GTA area for over 4 years. The thing we like the most is consistency in service we get. Always got timely statements, instant on answering emails and phone calls and quality advice. Thanks Rajiv for your great services…”",
       author: "Restaurant Owner",
       location: "Brampton, Ontario",
+      image: "1517248135467-4c7edcad34c4",
+      tags: ["Bookkeeping", "Statements"],
     },
     {
       rating: 5,
@@ -402,6 +406,8 @@ export const testimonials = {
         "“Rajiv took over our corporate books mid-year and had our T2 and financial statements filed well ahead of the deadline. Clear advice, no surprises, and he always picks up the phone.”",
       author: "Construction Company Owner",
       location: "Mississauga, Ontario",
+      image: "1504307651254-35680f356dfd",
+      tags: ["Corporate Tax", "T2 Filing"],
     },
     {
       rating: 5,
@@ -409,6 +415,8 @@ export const testimonials = {
         "“As a newly incorporated business we had no idea where to start. Rajiv set up our bookkeeping, payroll and HST filings and explained every step in plain language.”",
       author: "Tech Startup Founder",
       location: "Toronto, Ontario",
+      image: "1519389950473-47ba0277781c",
+      tags: ["Incorporation", "Payroll & HST"],
     },
     {
       rating: 5,
@@ -416,6 +424,8 @@ export const testimonials = {
         "“Our family has trusted Rajiv with our personal returns for years. He finds every credit we qualify for and makes tax season completely stress-free.”",
       author: "Family Tax Client",
       location: "Vaughan, Ontario",
+      image: "1511895426328-dc8714191300",
+      tags: ["Personal Tax", "Tax Credits"],
     },
     {
       rating: 5,
@@ -423,6 +433,8 @@ export const testimonials = {
         "“The monthly reporting gives us a real picture of our cash flow. It is like having a CFO on the team without the full-time cost.”",
       author: "Retail Business Owner",
       location: "Oakville, Ontario",
+      image: "1441986300917-64674bd600d8",
+      tags: ["Reporting", "Cash Flow"],
     },
     {
       rating: 5,
@@ -430,6 +442,8 @@ export const testimonials = {
         "“When the CRA reviewed our filings, Rajiv handled everything calmly and professionally. Every document was in order and the review closed quickly.”",
       author: "Trucking Company Owner",
       location: "Brampton, Ontario",
+      image: "1601584115197-04ecc0da31d7",
+      tags: ["CRA Review", "Compliance"],
     },
     {
       rating: 5,
@@ -437,6 +451,8 @@ export const testimonials = {
         "“Payroll, T4s and remittances are handled on time, every time. I can focus on running my clinic instead of worrying about deadlines.”",
       author: "Dental Clinic Owner",
       location: "Etobicoke, Ontario",
+      image: "1629909613654-28e377c37b09",
+      tags: ["Payroll", "T4 Slips"],
     },
     {
       rating: 5,
@@ -444,6 +460,8 @@ export const testimonials = {
         "“Responsive, knowledgeable and genuinely invested in our growth. The year-end planning alone saved us more than the fees.”",
       author: "Real Estate Investor",
       location: "Markham, Ontario",
+      image: "1560518883-ce09059eeffa",
+      tags: ["Tax Planning", "Advisory"],
     },
   ],
 };
