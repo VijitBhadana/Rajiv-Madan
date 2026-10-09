@@ -3,18 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#071322" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#071322" />
     <script>
-      // Apply the saved (or device) theme before the first paint so the page never flashes white
+      // Apply the saved theme (dark by default) before the first paint so the page never flashes white
       (function () {
         try {
           var saved = localStorage.getItem("theme");
-          var dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var dark = saved !== "light";
           document.documentElement.classList.toggle("dark", dark);
           document.documentElement.style.colorScheme = dark ? "dark" : "light";
-        } catch (e) {}
+          document.querySelector('meta[name="theme-color"]').content = dark ? "#071322" : "#ffffff";
+        } catch (e) {
+          document.documentElement.classList.add("dark");
+        }
       })();
     </script>
     <title>Rajiv Madan CPA | Accounting & Tax Solutions in Mississauga & GTA</title>

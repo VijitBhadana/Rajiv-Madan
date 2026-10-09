@@ -1,9 +1,10 @@
 import { useEffect } from "react";
-import { ChevronRight, Phone, ArrowRight, Check, MapPin, BadgeCheck } from "lucide-react";
+import { ChevronRight, Phone, ArrowRight, MapPin } from "lucide-react";
 import SmartLink from "../components/SmartLink";
 import Reveal from "../components/Reveal";
 import { CapabilityCard } from "../components/Capabilities";
 import CallToAction from "../components/CallToAction";
+import ServiceTree from "../components/ServiceTree";
 import { unsplash } from "../lib/unsplash";
 import { servicesPage, capabilities, contact } from "../data/siteData";
 
@@ -83,72 +84,8 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* ===== Featured services (alternating rows) ===== */}
-      <section className="overflow-x-clip bg-white py-16 dark:bg-navy-950 lg:py-24">
-        <div className="container-x space-y-16 sm:space-y-20 lg:space-y-28">
-          {featured.map((item, i) => {
-            const flip = i % 2 === 1;
-            return (
-              <article key={item.title} className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-                <Reveal from={flip ? "right" : "left"} className={flip ? "lg:order-2" : ""}>
-                  <div className="group relative">
-                    <div
-                      className={`absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-brand-200 to-gold-400/30 opacity-60 blur-xl dark:from-brand-500/30 dark:to-gold-400/20 ${
-                        flip ? "rotate-2" : "-rotate-2"
-                      }`}
-                    />
-                    <div className="relative overflow-hidden rounded-3xl shadow-panel">
-                      <img
-                        src={unsplash(item.image, 900)}
-                        alt={item.imageAlt}
-                        loading="lazy"
-                        className="aspect-[4/3] w-full object-cover transition duration-700 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-navy-950/50 via-transparent to-transparent" />
-                      <span className="absolute bottom-5 left-5 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-bold text-navy-900 backdrop-blur">
-                        <BadgeCheck className="h-3.5 w-3.5 text-brand-600" />
-                        {item.badge}
-                      </span>
-                    </div>
-                  </div>
-                </Reveal>
-
-                <Reveal from={flip ? "left" : "right"} delay={120}>
-                  <span className="font-display text-5xl font-extrabold leading-none text-slate-100 dark:text-white/10 sm:text-6xl">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.18em] text-brand-600 dark:text-brand-400">{item.tag}</p>
-                  <h2 className="mt-2 font-display text-3xl font-extrabold leading-tight tracking-tight text-navy-900 dark:text-white sm:text-4xl">
-                    {item.title}
-                  </h2>
-                  <p className="mt-5 text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">{item.text}</p>
-                  {item.points && (
-                    <ul className="mt-6 grid gap-2.5 sm:grid-cols-2">
-                      {item.points.map((point) => (
-                        <li key={point} className="flex items-start gap-2.5 text-sm font-medium text-slate-700 dark:text-slate-200">
-                          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-600 ring-1 ring-brand-200 dark:bg-brand-500/10 dark:text-brand-400 dark:ring-brand-500/30">
-                            <Check className="h-3 w-3" strokeWidth={3} />
-                          </span>
-                          {point}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  <a
-                    href={contact.phoneHref}
-                    className="group mt-8 inline-flex items-center gap-2 text-sm font-bold text-navy-900 dark:text-white"
-                  >
-                    <span className="border-b-2 border-brand-400 pb-0.5 transition group-hover:border-navy-900 dark:group-hover:border-white">
-                      Talk to Rajiv about this
-                    </span>
-                    <ArrowRight className="h-4 w-4 text-brand-600 transition group-hover:translate-x-1 dark:text-brand-400" />
-                  </a>
-                </Reveal>
-              </article>
-            );
-          })}
-        </div>
-      </section>
+      {/* ===== Featured services on a scroll-drawn line ===== */}
+      <ServiceTree items={featured} phoneHref={contact.phoneHref} />
 
       {/* ===== All services grid ===== */}
       <section id="all-services" className="bg-surface py-16 dark:bg-navy-900 lg:py-24">

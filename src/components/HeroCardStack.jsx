@@ -3,7 +3,7 @@ import { TrendingUp } from "lucide-react";
 import { unsplash } from "../lib/unsplash";
 
 // Fanned deck of image cards; the front card changes every few seconds
-const INTERVAL = 3200;
+const INTERVAL = 2000;
 
 // Pose of a card by its distance from the front one (0 = front, 1 = right, -1 = left)
 function pose(offset) {
@@ -43,7 +43,7 @@ export default function HeroCardStack({ cards }) {
               onClick={() => setActive(i)}
               aria-label={`Show ${c.title}`}
               tabIndex={offset === 0 ? -1 : 0}
-              className="absolute inset-y-4 left-[17%] w-[66%] overflow-hidden rounded-3xl border-4 border-white bg-navy-900 text-left shadow-[0_25px_50px_-12px_rgba(15,23,42,0.45)] transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] dark:border-navy-700 motion-reduce:transition-none"
+              className="absolute inset-y-4 left-[17%] w-[66%] overflow-hidden rounded-3xl border-4 border-white bg-navy-900 text-left shadow-[0_25px_50px_-12px_rgba(15,23,42,0.45)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] dark:border-navy-700 motion-reduce:transition-none"
               style={pose(offset)}
             >
               <img

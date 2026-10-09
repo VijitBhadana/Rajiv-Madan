@@ -133,20 +133,29 @@ export const credentials = {
 export const about = {
   pageTitle: "About Us",
   pageSubtitle: "Over 25 years of simple, organized and dependable accounting and tax services for individuals and businesses across the GTA.",
-  eyebrow: "About Us",
   title: "Meet Rajiv Madan",
+  spotlight: "It's Me Rajiv Madan",
   name: "Rajiv Madan",
   role: "Certified General Accountant, Mississauga",
-  experience: "25+",
-  designations: "CGA (Canada) · CA (India)",
-  office: "Office in Mississauga, Ontario",
   airport: "~5 minutes from Pearson Airport",
-  paragraphs: [
-    "Rajiv Madan is a Certified General Accountant operating from Mississauga, Canada. In addition to his CGA designation in Canada he also holds a Chartered Accountant designation from India. He has been actively involved in creating and delivering performance assuring business solutions for individuals and organizations for over 25 years.",
-    "Rajiv's office is located in Mississauga. This office is approximately five minutes away from the Lester B. Pearson international airport. He assists individuals and businesses alike for all kinds of accounting and tax services. His clientele is based in Mississauga, Brampton, Etobicoke, Woodbridge but extends to core of Toronto downtown, Hamilton, Burlington, Caledon, Markham and Scarborough.",
-    "Although accounting, bookkeeping and taxation are sensitive matters, Rajiv throughout his career has maintained in keeping things simple yet organized. Creating unnecessary clutter and complexities is an absolute avoidance when it comes to adopting an approach to your business.",
-  ],
-  promise: "It is Rajiv's promise to provide you courteous and dependable accounting and tax services.",
+  // Circles on the About tree. Each side runs top to bottom.
+  // icon = key of the map in components/Icon.jsx
+  tree: {
+    left: [
+      { icon: "clock", label: "Experience", stat: "25+", text: "years of practice" },
+      { icon: "check", label: "Designations", title: "CGA (Canada) · CA (India)" },
+      { icon: "trend", label: "Solutions", text: "Performance assuring business solutions for individuals and organizations" },
+      { icon: "layers", label: "Approach", text: "Simple yet organized, with no unnecessary clutter or complexity" },
+      { icon: "quote", label: "Promise", text: "Courteous and dependable accounting and tax services" },
+    ],
+    right: [
+      { icon: "building", label: "Office", title: "Mississauga", text: "Ontario, Canada" },
+      { icon: "plane", label: "Location", text: "About five minutes from Pearson International Airport" },
+      { icon: "receipt", label: "Services", text: "All kinds of accounting and tax services for individuals and businesses alike" },
+      { icon: "users", label: "Clientele", text: "Mississauga, Brampton, Etobicoke and Woodbridge" },
+      { icon: "pin", label: "Also serving", text: "Toronto downtown, Hamilton, Burlington, Caledon, Markham and Scarborough" },
+    ],
+  },
 };
 
 export const coreServices = {

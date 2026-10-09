@@ -10,6 +10,10 @@ import {
   Clock,
   PiggyBank,
   TrendingUp,
+  Plane,
+  Users,
+  Quote,
+  Layers,
 } from "lucide-react";
 
 const icons = {
@@ -24,6 +28,10 @@ const icons = {
   clock: Clock,
   piggy: PiggyBank,
   trend: TrendingUp,
+  plane: Plane,
+  users: Users,
+  quote: Quote,
+  layers: Layers,
 };
 
 export default function Icon({ name, className = "h-5 w-5", strokeWidth = 2 }) {

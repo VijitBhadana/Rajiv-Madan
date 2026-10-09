@@ -320,3 +320,296 @@
     animation: none;
   }
 }
+
+/* ===== About: tube light (always on a dark backdrop, in both themes) ===== */
+.tube-wire {
+  position: absolute;
+  bottom: 100%;
+  height: 12rem;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, #475569 40%);
+}
+/* metal channel the tube hangs from */
+.tube-batten {
+  height: 9px;
+  margin: 0 4%;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #64748b 0%, #334155 55%, #1e293b 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+.tube-lamp {
+  display: flex;
+  align-items: center;
+  margin-top: 3px;
+}
+/* end caps holding the glass */
+.tube-cap {
+  height: 18px;
+  width: 16px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #94a3b8 0%, #475569 50%, #1e293b 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+.tube-glass {
+  position: relative;
+  height: 13px;
+  flex: 1;
+  border-radius: 9999px;
+  /* frosted glass while off */
+  background: linear-gradient(180deg, #4b5563 0%, #2b323d 50%, #3a424e 100%);
+  box-shadow: inset 0 -2px 3px rgba(0, 0, 0, 0.4), inset 0 2px 2px rgba(255, 255, 255, 0.12);
+}
+.tube-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 50%, #eaf1ff 100%);
+  box-shadow:
+    0 0 6px 1px #fff,
+    0 0 18px 4px rgba(255, 255, 255, 0.85),
+    0 0 48px 12px rgba(226, 236, 255, 0.5),
+    0 0 120px 34px rgba(210, 226, 255, 0.28);
+}
+/* soft cone of light below the tube */
+.tube-beam {
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 3.5rem;
+  height: 30rem;
+  width: min(1100px, 140%);
+  transform: translateX(-50%);
+  opacity: 0;
+  background:
+    radial-gradient(ellipse 45% 70% at 50% 0%, rgba(255, 255, 255, 0.16), transparent 70%),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.07), transparent 85%);
+  clip-path: polygon(30% 0, 70% 0, 100% 100%, 0 100%);
+}
+@media (min-width: 1024px) {
+  .tube-beam {
+    top: 5rem;
+  }
+}
+
+/* three blinks, then on for good on the fourth */
+@keyframes tube-flicker {
+  0%,
+  5% {
+    opacity: 0;
+  }
+  7% {
+    opacity: 1;
+  }
+  10% {
+    opacity: 0;
+  }
+  22% {
+    opacity: 0;
+  }
+  24% {
+    opacity: 0.9;
+  }
+  28% {
+    opacity: 0;
+  }
+  42% {
+    opacity: 0;
+  }
+  44% {
+    opacity: 1;
+  }
+  46% {
+    opacity: 0.35;
+  }
+  48% {
+    opacity: 1;
+  }
+  51% {
+    opacity: 0;
+  }
+  70% {
+    opacity: 0;
+  }
+  73% {
+    opacity: 0.6;
+  }
+  75% {
+    opacity: 1;
+  }
+  77% {
+    opacity: 0.8;
+  }
+  80%,
+  100% {
+    opacity: 1;
+  }
+}
+.tube-scene.is-on .tube-glow,
+.tube-scene.is-on .tube-beam {
+  animation: tube-flicker 2.6s linear forwards;
+}
+
+/* headline words: bright grey, each with its own cast shadow */
+.tube-word {
+  opacity: 0;
+  color: #e5e7eb;
+  text-shadow:
+    0 1px 0 #9ca3af,
+    0 2px 0 #6b7280,
+    0 3px 0 #4b5563,
+    0 0 22px rgba(255, 255, 255, 0.18),
+    0 18px 22px rgba(0, 0, 0, 0.75);
+}
+@keyframes tube-word-in {
+  0% {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(28px) scale(0.94);
+  }
+  45% {
+    opacity: 0.9;
+    filter: blur(2px);
+  }
+  55% {
+    opacity: 0.35;
+  }
+  70% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+.tube-scene.is-on .tube-word {
+  animation: tube-word-in 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tube-scene.is-on .tube-glow,
+  .tube-scene.is-on .tube-beam,
+  .tube-scene.is-on .tube-word {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* ===== About: circuit tree ===== */
+/* desktop canvas: circle contents are sized in em, so tie the font size to its width */
+.tree-canvas {
+  container-type: inline-size;
+  font-size: 1.1cqw;
+}
+.tree-svg {
+  -webkit-mask-image: linear-gradient(to top, transparent, #000 5%);
+  mask-image: linear-gradient(to top, transparent, #000 5%);
+}
+/* lines draw themselves upward from the trunk (paths use pathLength="1") */
+.tree-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.6s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.tree.is-in .tree-draw {
+  stroke-dashoffset: 0;
+}
+/* a short bright dash that keeps running up each line */
+.tree-pulse {
+  stroke-dasharray: 0.05 2;
+  stroke-dashoffset: 0.05;
+  opacity: 0;
+}
+.tree.is-in .tree-pulse {
+  opacity: 0.9;
+  animation: tree-pulse var(--dur, 4s) linear var(--delay, 2s) infinite;
+}
+@keyframes tree-pulse {
+  from {
+    stroke-dashoffset: 0.05;
+  }
+  to {
+    stroke-dashoffset: -1;
+  }
+}
+
+.tree-orb {
+  border-radius: 9999px;
+  border: 2px solid var(--c);
+  background: radial-gradient(circle at 50% 28%, #13294a 0%, #0b1a2e 55%, #071322 100%);
+  transition:
+    opacity 0.5s ease,
+    transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+.tree-orb-photo {
+  border-width: 3px;
+}
+.tree-orb-link:hover,
+.tree-orb-link:focus-visible {
+  --c: #2dd4bf;
+}
+.tree-pop {
+  opacity: 0;
+  transform: scale(0.4);
+}
+.tree.is-in .tree-pop {
+  opacity: 1;
+  transform: none;
+}
+
+/* phones and tablets: vertical trunk with branches */
+.tree-trunk span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, var(--c) 6%, var(--c) 94%, transparent);
+  overflow: hidden;
+}
+.tree-trunk span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: linear-gradient(to bottom, transparent, #e6fffb, transparent);
+  animation: tree-drop 3.6s linear infinite;
+}
+.tree-trunk span:nth-child(2)::after {
+  animation-delay: 1.2s;
+}
+.tree-trunk span:nth-child(3)::after {
+  animation-delay: 2.4s;
+}
+@keyframes tree-drop {
+  from {
+    top: -90px;
+  }
+  to {
+    top: 100%;
+  }
+}
+.tree-branch {
+  background: var(--c);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tree-draw {
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+  .tree-pulse,
+  .tree-trunk span::after {
+    display: none;
+  }
+  .tree-pop {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

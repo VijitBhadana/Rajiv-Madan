@@ -3,7 +3,7 @@ import { cn } from "../lib/utils";
 import { socials } from "../data/siteData";
 
 // react-icons keyed by the `icon` field in siteData.socials
-const icons = {
+export const socialIcons = {
   facebook: FaFacebookF,
   instagram: FaInstagram,
   linkedin: FaLinkedinIn,
@@ -22,7 +22,7 @@ export default function SocialLinks({ size = "md", className, linkClassName }) {
   return (
     <ul className={cn("flex items-center gap-2", className)}>
       {socials.map(({ label, href, icon }) => {
-        const Cmp = icons[icon];
+        const Cmp = socialIcons[icon];
         return (
           <li key={label}>
             <a

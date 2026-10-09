@@ -2,18 +2,9 @@ import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { cn } from "../lib/utils";
 
-// Saved choice; without one the site follows the device's light / dark setting.
+// Saved choice; without one the site starts in dark mode.
 // index.html applies the same rule before the first paint, so there is no flash.
 const STORAGE_KEY = "theme";
-const DARK_QUERY = "(prefers-color-scheme: dark)";
-
-function readStored() {
-  try {
-    return localStorage.getItem(STORAGE_KEY);
-  } catch {
-    return null; // storage blocked (private mode, disabled cookies)
-  }
-}
 
 function store(theme) {
   try {
@@ -30,6 +21,7 @@ function applyTheme(theme) {
   root.classList.add("theme-switching");
   root.classList.toggle("dark", theme === "dark");
   root.style.colorScheme = theme;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "dark" ? "#071322" : "#ffffff");
   // Force a style flush, then let transitions back on
   void root.offsetHeight;
   requestAnimationFrame(() => root.classList.remove("theme-switching"));
@@ -43,16 +35,6 @@ export function useTheme() {
   useEffect(() => {
     applyTheme(theme);
   }, [theme]);
-
-  // Follow the device setting until the visitor picks a theme themselves
-  useEffect(() => {
-    const list = window.matchMedia(DARK_QUERY);
-    const onChange = (e) => {
-      if (!readStored()) setTheme(e.matches ? "dark" : "light");
-    };
-    list.addEventListener("change", onChange);
-    return () => list.removeEventListener("change", onChange);
-  }, []);
 
   const toggle = () => {
     const next = theme === "dark" ? "light" : "dark";
