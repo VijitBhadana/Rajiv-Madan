@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { cn } from "../lib/utils";
 
-// Saved choice; without one the site starts in dark mode.
+// Choice saved for this tab only; every new visit starts in dark mode.
 // index.html applies the same rule before the first paint, so there is no flash.
 const STORAGE_KEY = "theme";
 
 function store(theme) {
   try {
-    localStorage.setItem(STORAGE_KEY, theme);
+    sessionStorage.setItem(STORAGE_KEY, theme);
   } catch {
     // Nothing to do - the choice just won't survive a reload
   }

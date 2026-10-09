@@ -6,10 +6,13 @@
     <meta name="color-scheme" content="dark light" />
     <meta name="theme-color" content="#071322" />
     <script>
-      // Apply the saved theme (dark by default) before the first paint so the page never flashes white
+      // Every visit starts in dark mode. A switch to light only lasts for this tab
+      // (sessionStorage), so reloads keep it but a fresh visit is dark again.
+      // Applied before the first paint so the page never flashes white.
       (function () {
         try {
-          var saved = localStorage.getItem("theme");
+          localStorage.removeItem("theme"); // drop the old, permanent choice
+          var saved = sessionStorage.getItem("theme");
           var dark = saved !== "light";
           document.documentElement.classList.toggle("dark", dark);
           document.documentElement.style.colorScheme = dark ? "dark" : "light";
